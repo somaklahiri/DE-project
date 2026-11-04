@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project source="3.8.0" version="1.0">
+  <lib desc="#Wiring" name="0"/>
+  <lib desc="#Gates" name="1"/>
+  <lib desc="#Plexers" name="2"/>
+  <lib desc="#Arithmetic" name="3"/>
+  <lib desc="#Memory" name="4"/>
+  <lib desc="#I/O" name="5"/>
+  <main name="main"/>
+  <options/>
+  <mappings/>
+  <toolbar/>
+  <circuit name="main">
+    <a name="circuit" val="main"/>
+
+    <!-- External inputs -->
+    <comp lib="0" name="Pin" loc="(80,100)"><a name="facing" val="east"/><a name="label" val="CLK"/><a name="output" val="false"/></comp>
+    <comp lib="0" name="Pin" loc="(80,160)"><a name="facing" val="east"/><a name="label" val="RST"/><a name="output" val="false"/></comp>
+    <comp lib="0" name="Pin" loc="(80,260)"><a name="facing" val="east"/><a name="label" val="CAR_DETECT"/><a name="output" val="false"/></comp>
+    <comp lib="0" name="Pin" loc="(80,320)"><a name="facing" val="east"/><a name="label" val="CAR_DIRECTION"/><a name="output" val="false"/></comp>
+    <comp lib="0" name="Pin" loc="(80,380)"><a name="facing" val="east"/><a name="label" val="PEDESTRIAN_REQ"/><a name="output" val="false"/></comp>
+
+    <!-- Three-bit state memory -->
+    <comp lib="4" name="Register" loc="(480,250)">
+      <a name="width" val="3"/><a name="enable" val="true"/><a name="reset" val="true"/><a name="trigger" val="rising"/><a name="label" val="STATE_REGISTER"/>
+    </comp>
+
+    <!-- State transition logic block (gate-level network) -->
+    <comp lib="1" name="XOR Gate" loc="(250,190)"><a name="inputs" val="2"/><a name="label" val="NEXT_STATE_XOR"/></comp>
+    <comp lib="1" name="AND Gate" loc="(250,290)"><a name="inputs" val="2"/></comp>
+    <comp lib="1" name="OR Gate" loc="(350,240)"><a name="inputs" val="2"/></comp>
+    <comp lib="1" name="XOR Gate" loc="(350,350)"><a name="inputs" val="2"/></comp>
+    <comp lib="1" name="AND Gate" loc="(350,440)"><a name="inputs" val="3"/></comp>
+    <comp lib="1" name="OR Gate" loc="(430,390)"><a name="inputs" val="2"/></comp>
+    <comp lib="1" name="NOT Gate" loc="(180,440)"/>
+
+    <!-- State output taps -->
+    <comp lib="0" name="Pin" loc="(650,210)"><a name="facing" val="east"/><a name="label" val="STATE[2:0]"/><a name="width" val="3"/><a name="output" val="true"/></comp>
+
+    <!-- Output decoding logic -->
+    <comp lib="1" name="AND Gate" loc="(700,100)"><a name="inputs" val="3"/></comp>
+    <comp lib="1" name="AND Gate" loc="(700,160)"><a name="inputs" val="3"/></comp>
+    <comp lib="1" name="AND Gate" loc="(700,220)"><a name="inputs" val="3"/></comp>
+    <comp lib="1" name="AND Gate" loc="(700,280)"><a name="inputs" val="3"/></comp>
+    <comp lib="1" name="AND Gate" loc="(700,340)"><a name="inputs" val="3"/></comp>
+    <comp lib="1" name="AND Gate" loc="(700,400)"><a name="inputs" val="3"/></comp>
+    <comp lib="1" name="OR Gate" loc="(830,130)"><a name="inputs" val="2"/></comp>
+    <comp lib="1" name="OR Gate" loc="(830,250)"><a name="inputs" val="2"/></comp>
+    <comp lib="1" name="OR Gate" loc="(830,370)"><a name="inputs" val="2"/></comp>
+
+    <!-- State-bit inversion for decoding -->
+    <comp lib="1" name="NOT Gate" loc="(590,470)"/>
+    <comp lib="1" name="NOT Gate" loc="(590,520)"/>
+    <comp lib="1" name="NOT Gate" loc="(590,570)"/>
+
+    <!-- Traffic-light outputs -->
+    <comp lib="0" name="Pin" loc="(960,100)"><a name="facing" val="east"/><a name="label" val="NS_RED"/><a name="output" val="true"/></comp>
+    <comp lib="0" name="Pin" loc="(960,160)"><a name="facing" val="east"/><a name="label" val="NS_YELLOW"/><a name="output" val="true"/></comp>
+    <comp lib="0" name="Pin" loc="(960,220)"><a name="facing" val="east"/><a name="label" val="NS_GREEN"/><a name="output" val="true"/></comp>
+    <comp lib="0" name="Pin" loc="(960,280)"><a name="facing" val="east"/><a name="label" val="EW_RED"/><a name="output" val="true"/></comp>
+    <comp lib="0" name="Pin" loc="(960,340)"><a name="facing" val="east"/><a name="label" val="EW_YELLOW"/><a name="output" val="true"/></comp>
+    <comp lib="0" name="Pin" loc="(960,400)"><a name="facing" val="east"/><a name="label" val="EW_GREEN"/><a name="output" val="true"/></comp>
+
+    <!-- Clock and reset to state register -->
+    <wire from="(80,100)" to="(420,100)"/>
+    <wire from="(420,100)" to="(480,100)"/>
+    <wire from="(80,160)" to="(440,160)"/>
+    <wire from="(440,160)" to="(480,160)"/>
+
+    <!-- Input signals into transition logic -->
+    <wire from="(80,260)" to="(180,260)"/>
+    <wire from="(180,260)" to="(180,290)"/>
+    <wire from="(80,320)" to="(210,320)"/>
+    <wire from="(210,320)" to="(210,190)"/>
+    <wire from="(80,380)" to="(150,380)"/>
+    <wire from="(150,380)" to="(150,440)"/>
+    <wire from="(150,440)" to="(160,440)"/>
+
+    <!-- Transition network outputs feed the state register data bus -->
+    <wire from="(270,190)" to="(320,190)"/>
+    <wire from="(320,190)" to="(320,240)"/>
+    <wire from="(270,290)" to="(320,290)"/>
+    <wire from="(320,290)" to="(320,240)"/>
+    <wire from="(370,240)" to="(400,240)"/>
+    <wire from="(370,350)" to="(400,350)"/>
+    <wire from="(370,440)" to="(400,440)"/>
+    <wire from="(400,240)" to="(400,250)"/>
+    <wire from="(400,350)" to="(400,250)"/>
+    <wire from="(450,390)" to="(480,250)"/>
+
+    <!-- State bus output and decode fanout -->
+    <wire from="(510,250)" to="(650,210)"/>
+    <wire from="(510,250)" to="(620,250)"/>
+    <wire from="(620,250)" to="(620,100)"/>
+    <wire from="(620,100)" to="(670,100)"/>
+    <wire from="(620,160)" to="(670,160)"/>
+    <wire from="(620,220)" to="(670,220)"/>
+    <wire from="(620,280)" to="(670,280)"/>
+    <wire from="(620,340)" to="(670,340)"/>
+    <wire from="(620,400)" to="(670,400)"/>
+
+    <!-- Decoder terms to output combining gates -->
+    <wire from="(730,100)" to="(790,100)"/>
+    <wire from="(730,160)" to="(790,160)"/>
+    <wire from="(850,130)" to="(960,100)"/>
+    <wire from="(730,220)" to="(830,220)"/>
+    <wire from="(730,280)" to="(830,280)"/>
+    <wire from="(850,250)" to="(960,220)"/>
+    <wire from="(730,340)" to="(790,340)"/>
+    <wire from="(730,400)" to="(790,400)"/>
+    <wire from="(850,370)" to="(960,400)"/>
+
+    <!-- Individual yellow/red output terms -->
+    <wire from="(730,160)" to="(960,160)"/>
+    <wire from="(730,280)" to="(960,280)"/>
+    <wire from="(730,340)" to="(960,340)"/>
+  </circuit>
+</project>

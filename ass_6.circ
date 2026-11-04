@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project source="3.8.0" version="1.0">
+  <lib desc="#Wiring" name="0"/>
+  <lib desc="#Gates" name="1"/>
+  <lib desc="#Plexers" name="2"/>
+  <lib desc="#Arithmetic" name="3"/>
+  <lib desc="#Memory" name="4"/>
+  <lib desc="#I/O" name="5"/>
+  <lib desc="#Base" name="6"/>
+  <main name="main"/>
+  <options>
+    <a name="gateUndefined" val="ignore"/>
+    <a name="sim limit" val="1000"/>
+    <a name="simrand" val="0"/>
+  </options>
+  <mappings/>
+  <toolbar/>
+  <circuit name="main">
+    <a name="circuit" val="main"/>
+    <comp lib="0" name="Clock" loc="(100,180)">
+      <a name="facing" val="east"/>
+      <a name="label" val="1 Hz CLOCK"/>
+      <a name="labelVisible" val="true"/>
+    </comp>
+    <comp lib="4" name="Counter" loc="(260,180)">
+      <a name="width" val="4"/>
+      <a name="max" val="9"/>
+      <a name="label" val="MOD-10 UNITS"/>
+      <a name="labelVisible" val="true"/>
+    </comp>
+    <comp lib="4" name="Counter" loc="(520,180)">
+      <a name="width" val="3"/>
+      <a name="max" val="5"/>
+      <a name="label" val="MOD-6 TENS"/>
+      <a name="labelVisible" val="true"/>
+    </comp>
+  </circuit>
+</project>
